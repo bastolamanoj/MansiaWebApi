@@ -23,14 +23,36 @@ namespace Services.Repository.Core
             _logger = logger;
             this._dbSet= context.Set<T>();  
         }
-        public Task<bool> Add(T entity)
+        //public Task<bool> Add(T entity)
+        //{
+        //    _dbSet.Add(entity);
+
+        //}
+        public void Add(T entity)
         {
-            throw new NotImplementedException();
+             _dbSet.Add(entity);  
+            _dbContext.SaveChanges();
+        }
+
+        public async Task<T> AddAsync(T entity)
+        {
+            await _dbSet.AddAsync(entity);  
+            await _dbContext.SaveChangesAsync();
+            return entity;
+
         }
 
         public Task<bool> Delete(T entity)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _dbSet.Remove(entity);
+                return Task.FromResult(true);
+            }catch(Exception ex)
+            {
+                throw ex;
+            }
+
         }
 
         public Task<IEnumerable<T>> GetAllAsync()
@@ -47,6 +69,7 @@ namespace Services.Repository.Core
         {
             throw new NotImplementedException();
         }
+
     }
 
 }

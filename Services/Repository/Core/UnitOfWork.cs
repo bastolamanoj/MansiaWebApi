@@ -1,4 +1,5 @@
-﻿using DataProvider.Interfaces.Core;
+﻿using DataProvider.DatabaseContext;
+using DataProvider.Interfaces.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +10,73 @@ namespace Services.Repository.Core
 {
     public class UnitOfWork : IUnitOfWork
     {
+        private ApplicationDbContext dbContext;
+        public UnitOfWork(ApplicationDbContext dbContext) {
+            this.dbContext = dbContext;
+        }
         public void Commit()
         {
-            throw new NotImplementedException();
+            using (var dbContextTransaction = dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    dbContext.SaveChanges();
+                    dbContextTransaction.Commit();
+                }
+                catch (Exception  ex)
+                {
+                    dbContextTransaction.Rollback();
+                }
+                finally
+                {
+                    Dispose();
+                }
+            }
         }
 
-        public Task<bool> CommitAsync()
+        public async Task<bool> CommitAsync()
         {
-            throw new NotImplementedException();
+            using (var dbContextTransaction = dbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                  await  dbContext.SaveChangesAsync();
+                         dbContextTransaction.Commit();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    dbContextTransaction.RollbackAsync();
+                    throw ex;
+                }
+                finally
+                {
+                    Dispose();
+                }
+            }
         }
 
         public Task<bool> CompleteAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing) {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    dbContext.Dispose();
+                }
+            }
+            this.disposed = true;
         }
     }
 }
