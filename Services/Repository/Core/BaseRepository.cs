@@ -11,20 +11,20 @@ using System.Threading.Tasks;
 
 namespace Services.Repository.Core
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         protected ApplicationDbContext _dbContext;
         internal DbSet<T> _dbSet;
         protected readonly ILogger _logger;
 
-        public GenericRepository(ApplicationDbContext context, ILogger logger)
+        public BaseRepository(ApplicationDbContext context, ILogger logger)
         {
             _dbContext= context;
             _logger = logger;
             this._dbSet= context.Set<T>();  
         }
 
-        public GenericRepository(ApplicationDbContext dbContext)
+        public BaseRepository(ApplicationDbContext dbContext)
         {
             this._dbContext = dbContext;
         }

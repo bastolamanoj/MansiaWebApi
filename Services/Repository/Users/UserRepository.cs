@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Services.Repository.Users
 {
-    public class UserRepository : GenericRepository<User>, IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
         protected readonly ILogger<UserRepository> _logger;
         public UserRepository(ApplicationDbContext dbContext, ILogger<UserRepository> logger)

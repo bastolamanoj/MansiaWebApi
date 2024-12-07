@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DataProvider.Interfaces.Users
 {
-    public interface IUserRepository : IGenericRepository<User>
+    public interface IUserRepository : IBaseRepository<User>
     {
         Task<UserDTO> GetUserById(string id);  
         Task<List<UserDTO>> GetAllUsers();  
