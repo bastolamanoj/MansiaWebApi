@@ -4,7 +4,8 @@ using DataProvider.Interfaces.Users;
 
 using MansiaWebApi.Configuration;
 using MansiaWebApi.Hubs;
-
+using MansiaWebApi.Infrastructure;
+using MansiaWebApi.Middleware;
 using Services.Repository;
 using Services.Repository.Users;
 
@@ -21,6 +22,10 @@ builder.Services.AddPresentation()
 builder.Services.AddSignalR();
 
 builder.Services.AddLogging();
+
+//register global exception handler
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -51,6 +56,10 @@ if (app.Environment.IsDevelopment())
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
+//Register Exception handling middleware
+//app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.UseExceptionHandler();
 
 app.UseRouting();
 app.UseAuthentication();

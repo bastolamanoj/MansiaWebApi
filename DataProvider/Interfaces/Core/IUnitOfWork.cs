@@ -11,5 +11,6 @@ namespace DataProvider.Interfaces.Core
         void Commit();   
         Task<bool> CommitAsync();
         Task<bool> CompleteAsync();
+
     }
 }
