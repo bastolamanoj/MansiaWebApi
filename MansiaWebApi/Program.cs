@@ -1,78 +1,62 @@
-using DataProvider.DatabaseContext;
+
 using DataProvider.Interfaces;
-using DataProvider.Models.Identity;
+using DataProvider.Interfaces.Users;
+
 using MansiaWebApi.Configuration;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
-using System.Text;
+using MansiaWebApi.Hubs;
+
+using Services.Repository;
+using Services.Repository.Users;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddPresentation();
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddPresentation()
+                .AddDbConfigAndIdentity(builder.Configuration)
+                .AddAuthenticationAndAuthorization(builder.Configuration)
+                .AddSwaggerGen();
 
-//starting  by registering dbcontext here
-builder.Services.AddDbContext<ApplicationDbContext>(options => {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection String is not found.."));
-});
+builder.Services.AddSignalR();
 
-//Identity Code
-builder.Services.AddIdentity<User, UserRole>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
-    .AddSignInManager()
-    .AddRoles<Role>();
+builder.Services.AddLogging();
 
-//Jwt Code
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(option =>
-    option.TokenValidationParameters = new TokenValidationParameters
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+
+builder.Services.AddCors(options =>
+    options.AddPolicy("ChatApp", builder =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateIssuerSigningKey = true,
-        ValidateLifetime = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
-    }
+        builder.WithOrigins("http://localhost:3000/")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
+    })
 
 );
 
-// Add authenticaion to swagger UI  
-builder.Services.AddSwaggerGen(options =>
-{
-    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
-    });
-
-    options.OperationFilter<SecurityRequirementsOperationFilter>();
-});
-
-builder.Services.AddScoped<IAccountRepository, IAccountRepository>();
-
-
-
-
 var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
+}
+
 
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/ChatHub");
 
 app.Run();

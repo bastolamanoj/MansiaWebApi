@@ -23,6 +23,12 @@ namespace Services.Repository.Core
             _logger = logger;
             this._dbSet= context.Set<T>();  
         }
+
+        public GenericRepository(ApplicationDbContext dbContext)
+        {
+            this._dbContext = dbContext;
+        }
+
         //public Task<bool> Add(T entity)
         //{
         //    _dbSet.Add(entity);
@@ -55,14 +61,14 @@ namespace Services.Repository.Core
 
         }
 
-        public Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await this._dbSet.ToListAsync();
         }
 
-        public Task<T> GetById()
+        public async Task<T> GetById(string Id)
         {
-            throw new NotImplementedException();
+            return await this._dbSet.FindAsync(Id);
         }
 
         public Task<bool> Update(T entity)

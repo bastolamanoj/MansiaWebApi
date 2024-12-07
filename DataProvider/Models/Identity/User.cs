@@ -14,6 +14,7 @@ namespace DataProvider.Models.Identity
         [MaxLength(500, ErrorMessage = "Your Bio must be at most 500 characters")]
         public string? FirstName { get;set; }
         public string? LastName { get;set; }
+        public string? FullName { get;set; }
         public string? Bio { get; set; }
         public string? Address { get; set; }
         public string? Gender { get; set; }

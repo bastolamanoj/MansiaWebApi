@@ -1,4 +1,5 @@
-﻿using DataProvider.Models.Identity;
+﻿using DataProvider.Models.Chat;
+using DataProvider.Models.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,16 +13,19 @@ namespace DataProvider.DatabaseContext
     public class ApplicationDbContext : IdentityDbContext<User, Role, string, UserClaim,
         UserRole, UserLogin, RoleClaim, UserToken>
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
         }
 
-        DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<RoleClaim> RoleClaims { get; set; }
         public DbSet<UserClaim> UserClaims { get; set; }
+
+
+        public DbSet<ChatHubConnection> ChatHubConnections { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -38,6 +42,7 @@ namespace DataProvider.DatabaseContext
             builder.Entity<UserToken>(e => { e.ToTable(name: "UserTokens"); });
 
             // Other Custom model entity section
+            builder.Entity<ChatHubConnection>(e => { e.ToTable(name: "ChatHubConnections"); });
 
         }
 
