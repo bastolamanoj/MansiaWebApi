@@ -1,7 +1,6 @@
 
 using DataProvider.Interfaces;
 using DataProvider.Interfaces.Users;
-
 using MansiaWebApi.Configuration;
 using MansiaWebApi.Hubs;
 using MansiaWebApi.Infrastructure;

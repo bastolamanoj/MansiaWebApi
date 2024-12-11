@@ -31,11 +31,7 @@ namespace MansiaWebApi.Hubs
         {
 
         }
-        public override Task OnConnectedAsync()
-        {
-            Clients.Caller.SendAsync("OnConnected");
-            return base.OnConnectedAsync();
-        }
+      
         public async Task SaveUserConnection(string username, string userid)
         {
             var connectionId = Context.ConnectionId;
@@ -50,6 +46,12 @@ namespace MansiaWebApi.Hubs
             await dbContext.SaveChangesAsync();
         }
 
+        public override async Task OnConnectedAsync()
+        {
+            await SaveUserConnection("", "");
+            Clients.Caller.SendAsync("OnConnected", Context.ConnectionId);
+            await base.OnConnectedAsync();
+        }
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
             var hubConnection = dbContext.ChatHubConnections.FirstOrDefault(con => con.ConnectionId == Context.ConnectionId);

@@ -58,8 +58,13 @@ namespace Services.Repository.Core
             {
                 throw ex;
             }
-
         }
+
+
+        //public Task<bool> DeleteById(string Id)
+        //{
+        //    //_dbSet.Remove
+        //}
 
         public async Task<IEnumerable<T>> GetAllAsync()
         {

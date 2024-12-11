@@ -26,6 +26,8 @@ namespace DataProvider.DatabaseContext
 
 
         public DbSet<ChatHubConnection> ChatHubConnections { get; set; }
+        public DbSet<ChatRoom> ChatRooms { get; set; }
+        public DbSet<RoomUser> RoomUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -42,7 +44,45 @@ namespace DataProvider.DatabaseContext
             builder.Entity<UserToken>(e => { e.ToTable(name: "UserTokens"); });
 
             // Other Custom model entity section
+            builder.Entity<UserProfile>(e => { e.ToTable(name: "UserProfiles"); });
+            builder.Entity<Message>(e => {
+                e.ToTable(name: "Messages");
+                e.HasOne(m => m.Sender)
+                   .WithMany()
+                   .HasForeignKey(m => m.SenderId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+                e.HasOne(m => m.Receiver)
+                    .WithMany() 
+                    .HasForeignKey(m => m.ReceiverId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
             builder.Entity<ChatHubConnection>(e => { e.ToTable(name: "ChatHubConnections"); });
+            builder.Entity<ChatRoom>(e => {
+                 e.ToTable(name: "ChatRooms");
+                 e.HasMany(cr => cr.RoomUsers)
+                    .WithOne()
+                    .HasForeignKey("ChatRoomId")
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                e.HasMany(cr => cr.Messages)
+                    .WithOne()
+                    .HasForeignKey("ChatRoomId")
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<RoomUser>(e =>
+            {
+                e.ToTable(name: "RoomUsers");
+                // Configure as keyless
+                //e.HasNoKey();
+
+                e.HasOne(m => m.ChatRoom)
+                  .WithMany()
+                  .HasForeignKey(m => m.ChatRoomId)
+                  .OnDelete(DeleteBehavior.Restrict);
+            });
 
         }
 

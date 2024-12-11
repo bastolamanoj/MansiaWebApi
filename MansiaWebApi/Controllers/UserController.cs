@@ -21,13 +21,13 @@ namespace MansiaWebApi.Controllers
             if (Id.IsNullOrEmpty()) return BadRequest();
 
             var user = userRepository.GetUserById(Id);
-            if (user != null)
+            if (user == null)
             {
                 return NotFound("User Not Found");
             }
             else
             {
-                return StatusCode(StatusCodes.Status200OK, new { Data= user, Status = 200 });
+                return StatusCode(200, new { Data= user, Status = 200 });
             }
         }
 

@@ -9,6 +9,7 @@ namespace DataProvider.Models.Chat
 {
     public class RoomUser
     {
+        public string Id { get; set; }
         public string UserId { get; set; }       // Foreign Key to User
         public User User { get; set; }
         public string ChatRoomId { get; set; }   // Foreign Key to ChatRoom
