@@ -24,6 +24,11 @@ namespace Services.Repository.Core
             this._dbSet= context.Set<T>();  
         }
 
+        public ApplicationDbContext DataContext()
+        {
+            return _dbContext ??= new ApplicationDbContext();
+        }
+
         public BaseRepository(ApplicationDbContext dbContext)
         {
             this._dbContext = dbContext;

@@ -1,11 +1,15 @@
 
 using DataProvider.Interfaces;
+using DataProvider.Interfaces.Chat;
+using DataProvider.Interfaces.Core;
 using DataProvider.Interfaces.Users;
 using MansiaWebApi.Configuration;
 using MansiaWebApi.Hubs;
 using MansiaWebApi.Infrastructure;
 using MansiaWebApi.Middleware;
 using Services.Repository;
+using Services.Repository.Chat;
+using Services.Repository.Core;
 using Services.Repository.Users;
 
 
@@ -28,12 +32,14 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IChatHubConnectionRepository, ChatHubConnectionRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 
 builder.Services.AddCors(options =>
     options.AddPolicy("ChatApp", builder =>
     {
-        builder.WithOrigins("http://localhost:3000/")
+        builder.WithOrigins("http://localhost:3000")
                .AllowAnyHeader()
                .AllowAnyMethod()
                .AllowCredentials();
@@ -42,6 +48,7 @@ builder.Services.AddCors(options =>
 );
 
 var app = builder.Build();
+app.UseCors("ChatApp");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

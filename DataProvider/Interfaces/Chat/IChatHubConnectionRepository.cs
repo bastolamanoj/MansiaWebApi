@@ -11,7 +11,8 @@ namespace DataProvider.Interfaces.Chat
     public interface IChatHubConnectionRepository : IBaseRepository<ChatHubConnection>
     {
         Task<bool> SaveUserConnection(ChatHubConnection chc);
-        Task<bool> RemoveUserConnection(string ConnectionId);
+        Task<ChatHubConnection> GetByConnectionId(string ConnectionId);
+        Task<bool> RemoveUserConnection(ChatHubConnection chatHubConnection);
 
     }
 }

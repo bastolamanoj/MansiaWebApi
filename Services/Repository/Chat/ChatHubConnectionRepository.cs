@@ -21,12 +21,18 @@ namespace Services.Repository.Chat
             _logger = logger;
         }
 
-        public async Task<bool> RemoveUserConnection(string ConnectionId)
+        public async Task<ChatHubConnection> GetByConnectionId(string ConnectionId)
         {
-            var chatHubconn = await this.GetById(ConnectionId);
-            if (ConnectionId is null)
+            var hubConnection = await this._dbSet.FirstOrDefaultAsync(x => x.ConnectionId == ConnectionId);
+            return hubConnection;
+        }
+
+        public async Task<bool> RemoveUserConnection(ChatHubConnection chatHubConnection)
+        {
+           
+            if (chatHubConnection is null)
                 return false;
-            await this.Delete(chatHubconn);
+            await this.Delete(chatHubConnection);
             return true;
         }
 

@@ -24,7 +24,7 @@ namespace MansiaWebApi.Configuration
             //starting  by registering dbcontext here
             services.AddDbContext<ApplicationDbContext>(options => 
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection String is not found..")),
-                ServiceLifetime.Singleton
+                ServiceLifetime.Scoped
             );
 
             //Identity Code

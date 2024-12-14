@@ -13,6 +13,10 @@ namespace DataProvider.DatabaseContext
     public class ApplicationDbContext : IdentityDbContext<User, Role, string, UserClaim,
         UserRole, UserLogin, RoleClaim, UserToken>
     {
+        public ApplicationDbContext()
+        {
+        }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
 
