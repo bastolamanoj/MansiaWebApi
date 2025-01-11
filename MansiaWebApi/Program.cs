@@ -1,4 +1,3 @@
-
 using DataProvider.Interfaces;
 using DataProvider.Interfaces.Chat;
 using DataProvider.Interfaces.Core;
@@ -6,12 +5,10 @@ using DataProvider.Interfaces.Users;
 using MansiaWebApi.Configuration;
 using MansiaWebApi.Hubs;
 using MansiaWebApi.Infrastructure;
-using MansiaWebApi.Middleware;
 using Services.Repository;
 using Services.Repository.Chat;
 using Services.Repository.Core;
 using Services.Repository.Users;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,7 +52,6 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-
 }
 
 
@@ -64,7 +60,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 //Register Exception handling middleware
 //app.UseMiddleware<ExceptionHandlingMiddleware>();
-
+    
 app.UseExceptionHandler();
 
 app.UseRouting();
