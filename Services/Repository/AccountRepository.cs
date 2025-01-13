@@ -64,20 +64,20 @@ namespace Services.Repository
 
         public async Task<LoginResponse> LoginAccount(LoginDTO model)
         {
-            if (model is null) return new LoginResponse(false, "", "Login container is empty");
+            if (model is null) return new LoginResponse(false, "", "", "Login container is empty");
 
             var getUser = await _userManager.FindByEmailAsync(model.Email);
             if (getUser is null)
-                return new LoginResponse(false, null!, "User not Found");
+                return new LoginResponse(false, null!, "", "User not Found");
 
             bool checkUserPasswords = await _userManager.CheckPasswordAsync(getUser, model.Password);
             if (!checkUserPasswords)
-                return new LoginResponse(false, null!, "Invalid Password!!");
+                return new LoginResponse(false, null!, "", "Invalid Password!!");
 
             var getUserRole = await _userManager.GetRolesAsync(getUser);
             //var userSession = new UserSession(getUser.Id, getUser.FullName, getUser.Email, getUserRole.First());
             string token = GenerateToken(getUser);
-            return new LoginResponse(true, token!, "Login Success");
+            return new LoginResponse(true, token!, "", "Login Success");
         }
         private string GenerateToken(User user)
         {
@@ -96,8 +96,9 @@ namespace Services.Repository
             var token = new JwtSecurityToken(
              issuer: _configuration["Jwt:Issuer"],
              audience: _configuration["Jwt:Audience"],
-             claims: userClaims,
-             expires: DateTime.Now.AddDays(1),
+             claims: userClaims,    
+             //expires: DateTime.Now.AddDays(1),
+             expires: DateTime.UtcNow.AddMinutes( Int32.Parse(_configuration["Jwt:ExpirationInMinutes"])),
              signingCredentials: credentials
              );
             return new JwtSecurityTokenHandler().WriteToken(token);

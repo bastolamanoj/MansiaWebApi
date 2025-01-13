@@ -2,6 +2,7 @@
 using DataProvider.DTOs.User;
 using DataProvider.Interfaces.Users;
 using DataProvider.Models.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Services.Repository.Core;
 using System;
@@ -15,10 +16,12 @@ namespace Services.Repository.Users
     public class UserRepository : BaseRepository<User>, IUserRepository
     {
         protected readonly ILogger<UserRepository> _logger;
+        protected readonly ApplicationDbContext _context;
         public UserRepository(ApplicationDbContext dbContext, ILogger<UserRepository> logger)
              : base(dbContext, logger)
         {
             _logger = logger;
+            _context = dbContext;
         }
 
         public async Task<List<UserDTO>> GetAllUsers()
@@ -49,6 +52,19 @@ namespace Services.Repository.Users
             };
 
             return userDTO;
+        }
+
+        public async Task<UserDTO> GetUserByEmail(string Email)
+        {
+           var user = await _context.Users.FirstOrDefaultAsync(x=>x.Email ==Email);
+            var userDTO = new UserDTO();
+            if (user != null)
+            {
+                userDTO.Id = user.Id;
+                userDTO.Name = user.UserName;
+                userDTO.Email = user.Email;                
+            }
+           return userDTO;
         }
     }
 }

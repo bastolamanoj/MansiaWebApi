@@ -11,7 +11,8 @@ namespace DataProvider.Interfaces.Users
 {
     public interface IUserRepository : IBaseRepository<User>
     {
-        Task<UserDTO> GetUserById(string id);  
+        Task<UserDTO> GetUserById(string id);
+        Task<UserDTO> GetUserByEmail(string Email);
         Task<List<UserDTO>> GetAllUsers();  
     }
 }

@@ -1,4 +1,5 @@
-﻿using DataProvider.Models.Chat;
+﻿using DataProvider.Models;
+using DataProvider.Models.Chat;
 using DataProvider.Models.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,8 @@ namespace DataProvider.DatabaseContext
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<RoleClaim> RoleClaims { get; set; }
         public DbSet<UserClaim> UserClaims { get; set; }
+        public DbSet<ExceptionLogger> ExceptionLoggers { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
 
         public DbSet<ChatHubConnection> ChatHubConnections { get; set; }

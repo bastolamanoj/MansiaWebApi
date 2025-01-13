@@ -32,6 +32,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IChatHubConnectionRepository, ChatHubConnectionRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+//builder.Services.AddScoped<TokenProvider>();
+
 
 builder.Services.AddCors(options =>
     options.AddPolicy("ChatApp", builder =>
