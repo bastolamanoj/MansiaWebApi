@@ -42,12 +42,12 @@ namespace MansiaWebApi.Middleware
                 if (true)
                 {
                     ExceptionLogger ex = new ExceptionLogger() { 
-                        Id= Guid.NewGuid(),
+                        Id = Guid.NewGuid(),
                         ExceptionMessage = exception.Message,
                         ControllerName = exception.GetType().Name,  
-                        ExceptionStackTrace= exception.Message.ToString(),
-                        LogTime= DateTime.Now,
-                        UserId= Guid.NewGuid()
+                        ExceptionStackTrace = exception.Message.ToString(),
+                        LogTime = DateTime.Now,
+                        UserId = Guid.NewGuid()
                     };
                     exceptionLogger.Add(ex);
                 }

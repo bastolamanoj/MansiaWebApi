@@ -33,7 +33,7 @@ builder.Services.AddScoped<IChatHubConnectionRepository, ChatHubConnectionReposi
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
-//builder.Services.AddScoped<TokenProvider>();
+builder.Services.AddScoped<TokenProvider>();
 
 
 builder.Services.AddCors(options =>

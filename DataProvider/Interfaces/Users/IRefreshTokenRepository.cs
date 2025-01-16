@@ -1,4 +1,5 @@
-﻿using DataProvider.Interfaces.Core;
+﻿using DataProvider.DTOs.User;
+using DataProvider.Interfaces.Core;
 using DataProvider.Models;
 using System;
 using System.Collections.Generic;
@@ -10,5 +11,6 @@ namespace DataProvider.Interfaces.Users
 {
     public interface IRefreshTokenRepository : IBaseRepository<RefreshToken>
     {
+        Task<RefreshTokenDTO> GetRefreshToken(string RefreshToken);
     }
 }
