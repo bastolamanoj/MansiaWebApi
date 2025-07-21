@@ -76,8 +76,9 @@ namespace MansiaWebApi.Controllers
             refreshToken.Token = _tokenProvider.GenerateRefreshToken();
             refreshToken.ExpireOnUTC = DateTime.UtcNow.AddDays(1);
             _refreshTokenRepository.Add(new RefreshToken() { Token=refreshToken.Token, ExpireOnUTC = refreshToken.ExpireOnUTC,UserId=refreshToken.UserId});
-
+            //this will update the existing refresh token in the database
             return Ok(new { AccessToken = accessToken, RefreshToken = refreshToken.Token });
+
 
         }
     }
