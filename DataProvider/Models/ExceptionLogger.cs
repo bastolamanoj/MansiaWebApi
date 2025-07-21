@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DataProvider.Models.Identity;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataProvider.Models
 {
@@ -15,6 +12,9 @@ namespace DataProvider.Models
         public string ControllerName { get; set; }
         public string ExceptionStackTrace { get; set; }
         public DateTime LogTime { get; set; }
+
         public Guid UserId { get; set; }
+        [ForeignKey(nameof(UserId))]    
+        public User User { get; set; }  
     }
 }
