@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace DataProvider.Models.Identity
 {
-    public class User: IdentityUser
+    public class User : IdentityUser<Guid>
     {
+        public Guid Id { get; set; } = Guid.NewGuid();
         public string? DisplayName { get; set; }
         [MaxLength(500, ErrorMessage = "Your Bio must be at most 500 characters")]
         public string? FirstName { get;set; }

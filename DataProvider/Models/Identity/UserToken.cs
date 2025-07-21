@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataProvider.Models.Identity
 {
-    public class UserToken: IdentityUserToken<string>
+    public class UserToken: IdentityUserToken<Guid>
     {
 
     }

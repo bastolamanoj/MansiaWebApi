@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace DataProvider.Models.Identity
 {
-    public class RoleClaim: IdentityRoleClaim<string>
-    {
-        public int? Id { get; set; }
-    }
+        public class RoleClaim : IdentityRoleClaim<Guid>
+        {
+            public Guid Id { get; set; }
+        }
 }

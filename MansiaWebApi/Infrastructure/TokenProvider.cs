@@ -35,7 +35,7 @@ namespace MansiaWebApi.Infrastructure
             {
                   new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                  new Claim("UserId", user.Id),
+                  new Claim("UserId", user.Id.ToString()),
                   new Claim("Email", user.Email),
                   new Claim("Role", getUserRole.Result.First()),
             };

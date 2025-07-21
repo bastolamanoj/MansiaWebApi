@@ -33,7 +33,7 @@ namespace Services.Repository.Users
                     Id= token.Id,
                     Token = token.Token,
                     ExpireOnUTC = token.ExpireOnUTC,   
-                    user = token.User,
+                    //user = token.User,
                     UserId= token.UserId
                 };
             }

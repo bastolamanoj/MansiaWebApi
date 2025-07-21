@@ -43,7 +43,7 @@ namespace MansiaWebApi.Hubs
             await base.OnDisconnectedAsync(exception); // Ensure base method is awaited
         }
 
-        public async Task SaveUserConnection(string username, string userid)
+        public async Task SaveUserConnection(string username, Guid userid)
         {
             var connectionId = Context.ConnectionId;
             ChatHubConnection hubConnection = new ChatHubConnection

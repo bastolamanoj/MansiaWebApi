@@ -15,7 +15,7 @@ namespace DataProvider.Models.Chat
         public int Id { get; set; }
         public string ConnectionId { get; set; } = null!; // The SignalR connection ID for the user
         public string UserName { get; set; } = null!;
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }  // Navigation property to the User entity

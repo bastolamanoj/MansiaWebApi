@@ -1,17 +1,14 @@
 ﻿using DataProvider.Models;
 using DataProvider.Models.Chat;
 using DataProvider.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataProvider.DatabaseContext
 {
-    public class ApplicationDbContext : IdentityDbContext<User, Role, string, UserClaim,
+    public class ApplicationDbContext : IdentityDbContext<User, Role, Guid, UserClaim,
         UserRole, UserLogin, RoleClaim, UserToken>
     {
         public ApplicationDbContext()
@@ -30,8 +27,6 @@ namespace DataProvider.DatabaseContext
         public DbSet<UserClaim> UserClaims { get; set; }
         public DbSet<ExceptionLogger> ExceptionLoggers { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
-
-
         public DbSet<ChatHubConnection> ChatHubConnections { get; set; }
         public DbSet<ChatRoom> ChatRooms { get; set; }
         public DbSet<RoomUser> RoomUsers { get; set; }
@@ -41,7 +36,7 @@ namespace DataProvider.DatabaseContext
             base.OnModelCreating(builder);
             builder.HasDefaultSchema("dbo");
 
-            //Identity user section
+            // Identity user section
             builder.Entity<User>(e => { e.ToTable(name: "Users"); });
             builder.Entity<Role>(e => { e.ToTable(name: "Roles"); });
             builder.Entity<UserRole>(e => { e.ToTable(name: "UserRoles"); });
@@ -52,7 +47,8 @@ namespace DataProvider.DatabaseContext
 
             // Other Custom model entity section
             builder.Entity<UserProfile>(e => { e.ToTable(name: "UserProfiles"); });
-            builder.Entity<Message>(e => {
+            builder.Entity<Message>(e =>
+            {
                 e.ToTable(name: "Messages");
                 e.HasOne(m => m.Sender)
                    .WithMany()
@@ -60,15 +56,16 @@ namespace DataProvider.DatabaseContext
                    .OnDelete(DeleteBehavior.Restrict);
 
                 e.HasOne(m => m.Receiver)
-                    .WithMany() 
+                    .WithMany()
                     .HasForeignKey(m => m.ReceiverId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
             builder.Entity<ChatHubConnection>(e => { e.ToTable(name: "ChatHubConnections"); });
-            builder.Entity<ChatRoom>(e => {
-                 e.ToTable(name: "ChatRooms");
-                 e.HasMany(cr => cr.RoomUsers)
+            builder.Entity<ChatRoom>(e =>
+            {
+                e.ToTable(name: "ChatRooms");
+                e.HasMany(cr => cr.RoomUsers)
                     .WithOne()
                     .HasForeignKey("ChatRoomId")
                     .OnDelete(DeleteBehavior.Cascade);
@@ -82,16 +79,11 @@ namespace DataProvider.DatabaseContext
             builder.Entity<RoomUser>(e =>
             {
                 e.ToTable(name: "RoomUsers");
-                // Configure as keyless
-                //e.HasNoKey();
-
                 e.HasOne(m => m.ChatRoom)
                   .WithMany()
                   .HasForeignKey(m => m.ChatRoomId)
                   .OnDelete(DeleteBehavior.Restrict);
             });
-
         }
-
     }
 }

@@ -18,7 +18,7 @@ namespace DataProvider.Models
         public DateTime CreatedAt { get; set; }
         public DateTime? ReadAt { get; set; }
         public string NotificationType { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [ForeignKey(nameof(UserId))]
         public User User { get; set; }

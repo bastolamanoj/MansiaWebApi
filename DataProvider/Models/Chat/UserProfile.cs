@@ -14,7 +14,7 @@ namespace DataProvider.Models.Chat
     {
         [Key]
         public string Id { get; set; }
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public UserOnlineStatusEnum Status { get; set; } = UserOnlineStatusEnum.Offline;
         public DateTime LastSeen { get; set; }
         [ForeignKey(nameof(UserId))]

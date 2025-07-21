@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataProvider.Models.Identity
 {
-    public class Role : IdentityRole
+    public class Role : IdentityRole<Guid>
     {
         public string AliasName { get; set; }
     }
