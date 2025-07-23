@@ -4,6 +4,7 @@ using DataProvider.DTOs.User;
 using DataProvider.Interfaces;
 using DataProvider.Models.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Scaffolding.Metadata;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -32,10 +33,13 @@ namespace Services.Repository
             if (userDTO is null) return new GeneralResponse(false, "Model is Empty");
             var newUser = new User()
             {
+                Id= Guid.NewGuid(),
                 FullName = userDTO.Name,
                 Email = userDTO.Email,
                 PasswordHash = userDTO.Password,
                 UserName = userDTO.Email,
+                CreatedAt= DateTime.Now,
+                UpdatedAt= DateTime.Now
             };
             var user = await _userManager.FindByEmailAsync(userDTO.Email);
             if (user is not null) return new GeneralResponse(false, "User already exist..");
@@ -54,12 +58,22 @@ namespace Services.Repository
             }
             else
             {
-                var checkUser = await _roleManager.FindByNameAsync("User");
-                if (checkUser is null)
-                    await _roleManager.CreateAsync(new Role() { Name = "User", AliasName = "User" });
-                    await _userManager.AddToRoleAsync(newUser, "User");
-                return new GeneralResponse(true, "Account Created.");
+                var userRole = await _roleManager.FindByNameAsync("User");
+                if (userRole is null)
+                {
+                    var createUserRole = await _roleManager.CreateAsync(new Role { Name = "User", AliasName = "User" });
+                    if (!createUserRole.Succeeded)
+                        return new GeneralResponse(false, "Failed to create User role.");
+                }
+                try
+                {
+                     await _userManager.AddToRoleAsync(newUser, "User");
+                }catch(Exception ex)
+                {
+                    throw ex;
+                }
             }
+            return new GeneralResponse(true, "Account Created.");
         }
 
         public async Task<LoginResponse> LoginAccount(LoginDTO model)

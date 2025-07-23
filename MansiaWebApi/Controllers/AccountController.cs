@@ -31,14 +31,20 @@ namespace MansiaWebApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(UserDTO userDto)
         {
-            var response = await _accountRepository.CreateAccount(userDto);
-            if (response.Flag)
+            try
             {
-             return Ok(response);
-            }
-            else
+                var response = await _accountRepository.CreateAccount(userDto);
+                if (response.Flag)
+                {
+                 return Ok(response);
+                }
+                else
+                {
+                    return BadRequest(response);
+                }
+            }catch(Exception ex)
             {
-                return BadRequest(response);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.InnerException.Message.ToString());
             }
         }
 
