@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.Repository
+namespace DataProvider.Enum
 {
-    public class GenericRepository
+    public enum UserOnlineStatusEnum
     {
-
+        Online=1,
+        Offline=2,  
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataProvider.Models.Identity
 {
-    public  class UserRole: IdentityUserRole<string>
+    public  class UserRole: IdentityUserRole<Guid>
     {
 
     }

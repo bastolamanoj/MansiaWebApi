@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace DataProvider.Interfaces.Core
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork : IDisposable
     {
         void Commit();   
         Task<bool> CommitAsync();
         Task<bool> CompleteAsync();
+
     }
 }
