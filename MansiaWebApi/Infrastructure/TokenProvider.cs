@@ -35,9 +35,10 @@ namespace MansiaWebApi.Infrastructure
             {
                   new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                  new Claim("UserId", user.Id.ToString()),
-                  new Claim("Email", user.Email),
-                  new Claim("Role", getUserRole.Result.First()),
+                  new Claim("userId", user.Id.ToString()),
+                  new Claim("fullName", user.FullName),
+                  new Claim("email", user.Email),
+                  new Claim("role", getUserRole.Result.First()),
             };
 
             var token = new JwtSecurityToken(
