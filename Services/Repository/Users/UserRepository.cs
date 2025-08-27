@@ -2,6 +2,7 @@
 using DataProvider.DTOs.User;
 using DataProvider.Interfaces.Users;
 using DataProvider.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Services.Repository.Core;
@@ -17,11 +18,14 @@ namespace Services.Repository.Users
     {
         protected readonly ILogger<UserRepository> _logger;
         protected readonly ApplicationDbContext _context;
-        public UserRepository(ApplicationDbContext dbContext, ILogger<UserRepository> logger)
+        private readonly UserManager<IdentityUser> _userManager;
+
+        public UserRepository(ApplicationDbContext dbContext, ILogger<UserRepository> logger, UserManager<IdentityUser> userManager)
              : base(dbContext, logger)
         {
             _logger = logger;
             _context = dbContext;
+            _userManager = userManager; 
         }
 
         public async Task<List<UserDTO>> GetAllUsers()
