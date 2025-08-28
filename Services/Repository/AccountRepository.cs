@@ -22,10 +22,10 @@ namespace Services.Repository
         private readonly RoleManager<Role> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public AccountRepository(UserManager<User> userManager, RoleManager<Role> role, IConfiguration configuration)
+        public AccountRepository(UserManager<User> userManager, RoleManager<Role> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
-            _roleManager = role;
+            _roleManager = roleManager;
             _configuration = configuration;
         }
         public async Task<GeneralResponse> CreateAccount(UserDTO userDTO)
@@ -102,9 +102,10 @@ namespace Services.Repository
             {
                   new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                  new Claim("UserId", user.Id.ToString()),
-                  new Claim("Email", user.Email),
-                  new Claim("Role", getUserRole.Result.First()),
+                  new Claim("userId", user.Id.ToString()),
+                  new Claim("email", user.Email),
+                  new Claim("fullName", user.FullName),
+                  new Claim("role", getUserRole.Result.First()),
             };
 
             var token = new JwtSecurityToken(
@@ -117,6 +118,11 @@ namespace Services.Repository
              );
             return new JwtSecurityTokenHandler().WriteToken(token);
 
+        }
+
+        public async Task<IdentityResult> ChangePasswordAsync(User user, string currentPassword, string newPassword)
+        {
+            return await _userManager.ChangePasswordAsync(user, currentPassword, newPassword);
         }
 
 

@@ -28,11 +28,19 @@ namespace MansiaWebApi.Configuration
             );
 
             //Identity Code
-           services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddSignInManager()
-                .AddRoles<Role>();
+            //services.AddIdentity<User, Role>()
+            //     .AddEntityFrameworkStores<ApplicationDbContext>()
+            //     .AddSignInManager()
+            //     .AddRoles<Role>()
+            //     .AddDefaultTokenProviders();
+            services.AddIdentity<User, Role>()
+         .AddEntityFrameworkStores<ApplicationDbContext>()
+         .AddDefaultTokenProviders();
+
             return services;
+
+                //.AddDefaultTokenProviders();
+
         }
         public static IServiceCollection AddAuthenticationAndAuthorization(this IServiceCollection services, IConfiguration configuration)
         {
