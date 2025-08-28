@@ -18,9 +18,9 @@ namespace Services.Repository.Users
     {
         protected readonly ILogger<UserRepository> _logger;
         protected readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
 
-        public UserRepository(ApplicationDbContext dbContext, ILogger<UserRepository> logger, UserManager<IdentityUser> userManager)
+        public UserRepository(ApplicationDbContext dbContext, ILogger<UserRepository> logger, UserManager<User> userManager)
              : base(dbContext, logger)
         {
             _logger = logger;
